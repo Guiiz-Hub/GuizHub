@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<!-- Cette ligne dit au navigateur : "ce document est écrit en HTML5". Toujours la 1ère ligne, sans exception. -->
+<html lang="fr">
+<!-- <html> contient TOUT le document, du début à la fin. lang="fr" indique la langue (utile pour les lecteurs d'écran et les traducteurs). -->
+
+<head>
+    <!-- Le <head> = les infos SUR la page, invisibles à l'écran (réglages techniques, titre d'onglet...). -->
+
+    <meta charset="UTF-8">
+    <!-- Dit au navigateur d'utiliser l'encodage UTF-8, pour que les accents (é, à, ç) s'affichent bien. -->
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Indispensable pour un affichage correct sur mobile. On en reparlera à la leçon CSS. -->
+
+    <title>Mon premier site</title>
+    <!-- Le texte affiché dans l'onglet du navigateur. -->
+
+    <style>
+        /* On est ici en CSS, pas en HTML : la syntaxe des commentaires change, /* ... */ au lieu de <!-- ... -->. */
+        /* Une règle CSS = un sélecteur (qui ça cible) + des déclarations entre accolades (quoi changer). */
+
+        /* ===== Le sélecteur * cible TOUT, sans exception ===== */
+        * {
+            box-sizing: border-box;
+            /* Par défaut, "width" ne compte pas le padding ni la bordure dans la largeur totale d'une boîte
+               (ça surprend tout le monde au début). border-box les inclut : la largeur reste ce que tu as écrit. */
+        }
+
+        /* ===== Sélecteur par balise : s'applique à TOUS les <body> (donc toute la page) ===== */
+        body {
+            font-family: -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; /* Liste de secours : le navigateur essaie la 1ère police, sinon la suivante. */
+            max-width: 640px;        /* La page ne s'étale pas sur tout l'écran : plus agréable à lire. */
+            margin: 3rem auto;       /* "auto" à gauche ET à droite = centre le bloc horizontalement. */
+            padding: 0 1.5rem;       /* Marge intérieure sur les côtés, utile sur petit écran. */
+            line-height: 1.6;        /* Espace entre les lignes de texte, pour la lisibilité. */
+            color: #22262B;
+            background-color: #F5F6F7;
+        }
+
+        h1, h2 {
+            color: #2A6F97;
+            /* Un sélecteur peut cibler plusieurs balises à la fois, séparées par une virgule. */
+        }
+
+        h1 {
+            border-bottom: 2px solid #2A6F97;
+            padding-bottom: 0.4rem;
+        }
+
+        /* ===== La balise <img> se comporte comme du texte par défaut : on la façonne avec du CSS ===== */
+        .avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;   /* Un cercle parfait sur une image carrée : 50% arrondit exactement jusqu'au centre. */
+            object-fit: cover;    /* Si l'image n'a pas les bonnes proportions, elle est recadrée plutôt qu'étirée. */
+            display: block;
+            margin-bottom: 1rem;
+        }
+
+        /* ===== Sélecteur par classe (le point devant le nom) : cible class="intro" uniquement ===== */
+        .intro {
+            font-size: 1.1rem;
+            color: #4A4F55;
+        }
+
+        a {
+            color: #2A6F97;
+            text-decoration: none;
+        }
+
+        /* ===== Pseudo-classe : cette règle ne s'applique que quand la souris survole le lien ===== */
+        a:hover {
+            text-decoration: underline;
+        }
+
+        /* ===== Flexbox : aligne des éléments enfants en ligne (ou en colonne) automatiquement ===== */
+        .cards {
+            display: flex;       /* Transforme ce conteneur en "flex container" : ses enfants directs deviennent des "flex items". */
+            gap: 1rem;            /* Espace entre les items, sans avoir à mettre des margins sur chacun. */
+            flex-wrap: wrap;      /* Si ça ne tient pas sur une ligne, les items passent à la ligne suivante. */
+            margin: 1.5rem 0;
+        }
+
+        .card {
+            flex: 1;              /* Chaque carte prend une part égale de l'espace disponible. */
+            min-width: 150px;     /* En dessous de cette largeur, la carte passe à la ligne plutôt que de s'écraser. */
+            background-color: #FFFFFF;
+            border: 1px solid #D8DBDE;
+            border-radius: 8px;
+            padding: 1rem;
+        }
+
+        .card h3 {
+            margin-top: 0;
+            color: #2A6F97;
+        }
+
+        /* ===== Encore flexbox, cette fois pour aligner un champ et un bouton sur une ligne ===== */
+        #add-item-form {
+            display: flex;
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+
+        #add-item-form input {
+            flex: 1;              /* Le champ prend toute la place restante, le bouton garde sa taille naturelle. */
+            padding: 0.5rem;
+            border: 1px solid #D8DBDE;
+            border-radius: 6px;
+            font: inherit;        /* Sans ça, un <input> n'hérite pas de la police de la page par défaut. */
+        }
+
+        #add-item-form button {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 6px;
+            background-color: #2A6F97;
+            color: white;
+            cursor: pointer;      /* Affiche une main au survol, même si un <button> est déjà cliquable sans ça. */
+        }
+
+        #add-item-form button:hover {
+            background-color: #1D4E6E;
+        }
+
+        /* ===== Media query : cette règle ne s'applique QUE si la fenêtre fait 600px ou moins ===== */
+        @media (max-width: 600px) {
+            .cards {
+                flex-direction: column;   /* Les cartes passent d'une ligne à une colonne empilée sur petit écran. */
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Le <body> = TOUT ce qui est visible à l'écran. C'est ici qu'on va passer 90% de notre temps. -->
+
+    <img class="avatar" src="https://picsum.photos/id/64/200/200" alt="Photo de profil (image de démonstration)">
+    <!-- <img> : src = l'adresse de l'image, alt = le texte affiché si l'image ne charge pas
+         (et lu par les lecteurs d'écran). Jamais d'<img> sans alt. Ici, picsum.photos fournit
+         une image aléatoire gratuite : très pratique pour tester une mise en page avant d'avoir tes vraies images. -->
+
+    <h1>Bienvenue sur mon premier site</h1>
+    <!-- <h1> = titre principal (Heading niveau 1). Un seul h1 par page, en général. -->
+
+    <p class="intro">
+        Je m'appelle Guillaume, ingénieur en systèmes aéronautiques,
+        et j'apprends le développement web pas à pas.
+    </p>
+    <!-- <p> = paragraph, un bloc de texte "normal". Le class="intro" ne fait RIEN par lui-même :
+         c'est juste une étiquette que le CSS va pouvoir cibler (voir le style .intro plus bas). -->
+
+    <h2>Ce que je veux apprendre</h2>
+    <!-- <h2> = sous-titre (niveau 2), une hiérarchie en-dessous du h1. -->
+
+    <ul id="learning-list">
+        <!-- <ul> = "unordered list", une liste à puces. L'id="learning-list" est comme une class,
+             mais réservé à UN SEUL élément de la page : c'est ce qui va nous permettre de le retrouver en JavaScript. -->
+        <li>Le HTML : la structure (on y est)</li>
+        <li>Le CSS : la mise en forme</li>
+        <li>Le JavaScript : l'interactivité</li>
+        <!-- Chaque <li> ("list item") est un élément de la liste. -->
+    </ul>
+
+    <form id="add-item-form">
+        <!-- <form> regroupe des champs de saisie. Sans JavaScript, le valider recharge la page
+             et envoie les données au serveur — ici on va intercepter ça en JS. -->
+        <input type="text" id="new-item-input" placeholder="Ex : les media queries" required>
+        <!-- required : le navigateur refuse de soumettre si ce champ est vide, avant même que le JS n'intervienne. -->
+        <button type="submit">Ajouter à la liste</button>
+    </form>
+
+    <p>
+        Pour aller plus loin : <a href="https://developer.mozilla.org/fr/docs/Web/HTML">la référence HTML de MDN</a>.
+    </p>
+    <!-- <a> = "anchor", un lien cliquable. href = l'adresse de destination. -->
+
+    <h2>Mes forces</h2>
+
+    <div class="cards">
+        <!-- <div> = une balise "neutre", sans sens particulier, qui sert juste de conteneur. -->
+        <div class="card">
+            <h3>Rigueur</h3>
+            <p>Habitude de la certification et des cahiers des charges précis.</p>
+        </div>
+        <div class="card">
+            <h3>Python</h3>
+            <p>Scripts de traitement de données déjà en production.</p>
+        </div>
+        <div class="card">
+            <h3>Curiosité</h3>
+            <p>Apprend le web étape par étape, en comprenant chaque brique.</p>
+        </div>
+    </div>
+    <!-- Réduis la largeur de la fenêtre de l'aperçu (ou regarde sur mobile) : les 3 cartes passent en colonne
+         grâce à la media query "@media (max-width: 600px)" définie dans le style. -->
+
+    <script>
+        // Le <script> est en bas du <body>, pas dans le <head> : à ce stade, tout le HTML au-dessus
+        // a déjà été construit par le navigateur, donc document.querySelector va bien trouver nos éléments.
+        // (Alternative moderne, équivalente : mettre le script dans le <head> avec l'attribut "defer".)
+
+        const form = document.querySelector('#add-item-form');
+        // querySelector prend un sélecteur CSS — les MÊMES sélecteurs que dans le style ! — et renvoie
+        // le premier élément qui correspond (ou "null" si rien ne correspond).
+        const input = document.querySelector('#new-item-input');
+        const list = document.querySelector('#learning-list');
+
+        form.addEventListener('submit', function (event) {
+            // addEventListener : "quand CET événement se produit sur CET élément, exécute cette fonction."
+            // Ici : quand le <form> est soumis (bouton cliqué OU touche Entrée dans le champ).
+
+            event.preventDefault();
+            // Par défaut, soumettre un <form> recharge la page et repart de zéro. preventDefault()
+            // annule ce comportement pour qu'on puisse gérer nous-mêmes ce qui se passe.
+
+            const newItem = document.createElement('li');
+            // createElement crée un élément EN MÉMOIRE : il n'apparaît pas encore sur la page.
+            newItem.textContent = input.value;
+            // textContent = le texte affiché à l'intérieur de l'élément. input.value = ce que l'utilisateur a tapé.
+
+            list.appendChild(newItem);
+            // appendChild insère réellement le nouvel élément dans la page, en dernière position du <ul>.
+
+            input.value = '';
+            // On vide le champ, prêt pour une nouvelle saisie.
+        });
+    </script>
+
+</body>
+</html>
