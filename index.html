@@ -123,6 +123,19 @@
             background-color: #1D4E6E;
         }
 
+        .delete-btn {
+            margin-left: 0.5rem;
+            border: none;
+            background: none;
+            color: #B3261E;
+            cursor: pointer;
+            font-size: 0.85rem;
+        }
+
+        .delete-btn:hover {
+            text-decoration: underline;
+        }
+
         /* ===== Media query : cette règle ne s'applique QUE si la fenêtre fait 600px ou moins ===== */
         @media (max-width: 600px) {
             .cards {
@@ -205,7 +218,21 @@
         // le premier élément qui correspond (ou "null" si rien ne correspond).
         const input = document.querySelector('#new-item-input');
         const list = document.querySelector('#learning-list');
+        
+        function addDeleteButton(li) {
+            const deleteBtn = document.createElement('button');
+            deleteBtn.textContent = '✕';
+            deleteBtn.className = 'delete-btn';
 
+            deleteBtn.addEventListener('click', function () {
+                li.remove();
+            });
+
+            li.appendChild(deleteBtn);
+        }
+
+        list.querySelectorAll('li').forEach(addDeleteButton);
+        
         form.addEventListener('submit', function (event) {
             // addEventListener : "quand CET événement se produit sur CET élément, exécute cette fonction."
             // Ici : quand le <form> est soumis (bouton cliqué OU touche Entrée dans le champ).
@@ -222,6 +249,8 @@
             list.appendChild(newItem);
             // appendChild insère réellement le nouvel élément dans la page, en dernière position du <ul>.
 
+            addDeleteButton(newItem);
+            
             input.value = '';
             // On vide le champ, prêt pour une nouvelle saisie.
         });
